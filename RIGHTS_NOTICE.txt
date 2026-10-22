@@ -1,0 +1,2 @@
+Copyright (c) 2026 Ryutaro Yonezu / Yonezu Research Lab. All rights reserved.
+Paper, code, figures, certificate and artifacts are provided for inspection and reproducibility. No general reuse license is granted.
