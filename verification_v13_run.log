@@ -1,0 +1,10 @@
+PASS: independent real 64-code control and its 9 moment equalities
+PASS cut 15/90
+PASS cut 30/90
+PASS cut 45/90
+PASS cut 60/90
+PASS cut 75/90
+PASS cut 90/90
+PASS a=64 negative-control gap -2987408194248599068858710959022001990139904
+CERT_65 PASS_INDEPENDENT_EXACT; cuts= 90 gap= 65245054658776971334908126197187583410176
+PROVED: alpha(Cay(F_2^9, C6)) <=64, provided moment validity hypotheses.
