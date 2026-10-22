@@ -1,0 +1,9 @@
+CUT CHECK 1/90: plus
+CUT CHECK 30/90: plus
+CUT CHECK 60/90: plus
+CUT CHECK 90/90: plus
+INDEPENDENT_AUDIT65_PASS
+C6 generators 60; dimension 9; components 64
+pair orbits [1, 90, 45, 180, 15, 60, 90, 10, 6, 15] triples 91 anchored instances 89475
+90 cuts + 11 equalities: exact gap 65245054658776971334908126197187583410176
+64-word control PASS
