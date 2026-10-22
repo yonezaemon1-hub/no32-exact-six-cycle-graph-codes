@@ -1,0 +1,140 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=27mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm,booktabs,array,hyperref,microtype}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newcommand{\F}{\mathbb F}
+\newcommand{\calF}{\mathcal F}
+\title{Exact Optimality of a Six-Cycle-Difference Graph Code on Six Vertices\\[4pt]\large A Computer-Assisted Integer Certificate}
+\author{Ryutaro Yonezu\\Yonezu Research Lab\\\texttt{yonezaemon1+research@gmail.com}}
+\date{22 October 2026 \quad -- \quad version 1.3, unrefereed preprint}
+\begin{document}
+\maketitle
+\begin{abstract}
+Let $D_{C_6}(6)$ be the largest family of graphs on six labelled vertices such that the symmetric difference of no two distinct graphs is \emph{exactly} a Hamiltonian six-cycle. We report a finite, computer-assisted proof of
+\(D_{C_6}(6)=4096.\)
+The sixty forbidden differences span a nine-dimensional binary space, splitting the $2^{15}$ graphs into sixty-four isomorphic $512$-vertex components. An elementary linear construction gives an independent set of size $64$ per component. For the upper bound, we apply symmetrized conditional three-point moments and obtain a contradiction to the existence of an independent set of size $65$. The contradiction is certified by ninety integral Rayleigh cuts and eleven equality multipliers. A separate Python standard-library verifier reconstructs all $91$ admissible anchored triple orbits and validates the positive Farkas gap using integer arithmetic only. The full certificate and verifier are supplied. An independently implemented AI-assisted audit of the moment identities, orbit counts and integer certificate has reported conditional proof PASS and computation PASS; no human peer review or formal Lean/Coq certification has taken place. The graph-code framework is prior work, and novelty of this particular finite value remains unconfirmed.
+\end{abstract}
+
+\section{Definition and precise scope}
+Identify each graph on the labelled vertex set $[6]$ with its $15$-bit edge-incidence vector in $\F_2^{15}$. Let $\calF$ be the set of incidence vectors of copies of the Hamiltonian cycle $C_6$ on $[6]$. In particular, $|\calF|=6!/(12)=60$. Define
+\[
+D_{C_6}(6)=\max\bigl\{|\mathcal A|:\ \mathcal A\subseteq\F_2^{15},\quad
+ (\mathcal A-\mathcal A)\cap\calF=\varnothing\bigr\},
+\]
+where the pairwise-difference condition is imposed on distinct elements and arithmetic is over $\F_2$. The notation excludes \emph{exact copies} of $C_6$; it does not exclude all differences \emph{containing} a six-cycle. No claim is made for other $n$.
+
+\begin{theorem}[Finite optimality, certificate-dependent]\label{thm:main}
+For the precise forbidden family above,
+\[
+\boxed{D_{C_6}(6)=4096=2^{12}.}
+\]
+The upper bound is a finite computer-assisted proof whose exact certificate is included with this manuscript and is independently executable. An independently implemented AI-assisted check of the v1.2 certificate and its v1.2b adversarial addendum has reported conditional PASS for the proof and PASS for the arithmetic. The derivation is not human-refereed or formally proof-assistant certified.
+\end{theorem}
+
+\section{Reduction to one $512$-vertex component}
+The binary span $V=\langle\calF\rangle$ has dimension $9$. This may be checked by Gaussian elimination on the explicitly enumerated sixty cycle vectors (the verifier performs this operation). For context, every Hamiltonian cycle is Eulerian and has even size; the even-weight subspace of the ten-dimensional cycle space of $K_6$ has dimension nine, providing an a priori upper bound on $\dim V$.
+
+The Cayley graph on $\F_2^{15}$ with connection set $\calF$ is the disjoint union of $2^{15-9}=64$ isomorphic copies of
+\[
+\Gamma=\operatorname{Cay}(\F_2^9,G), \qquad |G|=60,
+\]
+where $G$ is the set of cycle vectors expressed in the computed echelon basis of $V$. Consequently,
+\begin{equation}\label{eq:factor}
+D_{C_6}(6)=64\,\alpha(\Gamma).
+\end{equation}
+In the verifier's nine-bit basis, the three parity checks $25$, $10$, and $20$ (integers representing bit masks) define the six-dimensional subspace
+\[
+H=\{x\in\F_2^9:\langle x,25\rangle=\langle x,10\rangle=
+\langle x,20\rangle=0\}.
+\]
+Direct enumeration confirms $|H|=64$ and $(H-H)\cap G=\varnothing$; the verifier checks both, so $\alpha(\Gamma)\ge64$. The remaining task is to exclude $65$.
+
+\section{Conditional symmetrized three-point moments}\label{sec:moments}
+Suppose, for contradiction, that an independent set $A\subseteq\F_2^9$ has exactly $a=65$ elements. Take a uniformly random translation of $A$ and an independent uniformly random permutation in $S_6$ acting on the edges of $K_6$. Let $X_u\in\{0,1\}$ denote membership of $u\in\F_2^9$ in the resulting random set. Its size is always $a$, and its distribution is translation- and $S_6$-invariant. Put $\rho=\mathbb E X_0=a/512$ and
+\[
+d_u=\frac{\mathbb E(X_0X_u)}{\rho},\qquad
+ t_{u,v}=\frac{\mathbb E(X_0X_uX_v)}{\rho}.
+\]
+Every $d_u,t_{u,v}$ is in $[0,1]$. Moreover,
+\begin{equation}\label{eq:elementary}
+d_0=1,\qquad d_g=0\ (g\in G),\qquad
+ \sum_{u\in\F_2^9}d_u=a,
+\end{equation}
+\begin{equation}\label{eq:extension}
+\sum_{v\notin\{0,u\}}t_{u,v}=(a-2)d_u\quad (u\ne0).
+\end{equation}
+Indeed, on the event $X_0X_u=1$ there are exactly $a-2$ occupied positions other than $0,u$.
+
+The $S_6$ action partitions the $512$ displacement vectors into ten orbits $O_0,\dots,O_9$ with sizes
+\[
+(1,90,45,180,15,60,90,10,6,15).
+\]
+Here $O_0=\{0\}$ and $O_5=G$. The unordered \emph{admissible} anchored triples $\{0,u,v\}$, where $u,v,u+v\notin G$ and $0,u,v$ are distinct, form $91$ classes under vertex permutations and anchor switching. Their $89{,}475$ anchored pairs are enumerated exhaustively in the verifier. Thus the moments are encoded by a box-constrained vector $z\in[0,1]^{101}$: ten $d$-orbit coordinates and ninety-one $t$-orbit coordinates.
+
+Let $s_i=|O_i|$. For $i\notin\{0,5\}$, choose $u\in O_i$ and write $C_{ij}$ for the number of $v\notin\{0,u\}$ with admissible triple $\{0,u,v\}$ in class $j$. The exact equalities are
+\begin{equation}\label{eq:eqsys}
+\sum_i s_i d_i=a,\qquad
+\sum_{j=0}^{90} C_{ij}t_j-(a-2)d_i=0\ (i=1,2,3,4,6,7,8,9),
+\qquad d_0=1,\quad d_5=0.
+\end{equation}
+There are eleven scalar equations; the verifier reconstructs every $s_i,C_{ij}$ from the graph, not from a numerical optimization output.
+
+\section{Positive semidefiniteness and a finite contradiction}
+For indices $u,v\in\F_2^9$, define matrices
+\[
+M^+_{u,v}=\frac{\mathbb E(X_0X_uX_v)}{\rho},\qquad
+M^-_{u,v}=\frac{\mathbb E[(1-X_0)X_uX_v]}{\rho}=d_{u+v}-M^+_{u,v}.
+\]
+The equality in the second definition follows by translation invariance. Both are positive semidefinite, because for any integral $512$-vector $q$,
+\begin{equation}\label{eq:psd}
+q^\top M^+q=\frac{\mathbb E\left[X_0(\sum_u q_uX_u)^2\right]}{\rho}\ge0,\quad
+q^\top M^-q=\frac{\mathbb E\left[(1-X_0)(\sum_u q_uX_u)^2\right]}{\rho}\ge0.
+\end{equation}
+The entry of $M^+$ is $d_u$ if $u=v$ or one index is $0$, is $t_{u,v}$ if $0,u,v$ is admissible, and is $0$ if any pair has a forbidden difference. Thus for every integer $q$, either quadratic form in \eqref{eq:psd} is \emph{an explicit integral linear form} $c(q)^\top z$.
+
+\begin{lemma}[Machine-checkable integer contradiction]\label{lem:cert}
+For $a=65$ there exist $90$ integer quadratic forms from \eqref{eq:psd}, with nonnegative integer multipliers $\lambda_1,\ldots,\lambda_{90}$, and eleven integer multipliers $\mu_0,\ldots,\mu_{10}$ for \eqref{eq:eqsys}, such that their combination yields an inequality
+\begin{equation}\label{eq:certificate}
+C^\top z\le R
+\end{equation}
+while the coordinate box $0\le z_i\le1$ implies
+\begin{equation}\label{eq:gap}
+C^\top z\ge \sum_{i=1}^{101}\min(0,C_i)=B,
+\qquad B-R=\text{\footnotesize\texttt{65245054658776971334908126197187583410176}}>0.
+\end{equation}
+All coefficients, including the integer $B-R$, are reconstructed exactly from the machine-readable attached certificate.
+\end{lemma}
+\begin{proof}
+The file \texttt{CERT\_65\_EXCLUSION\_v1\_2.json} contains each of the ninety pairs $(\mathrm{sign},q)$, its nonnegative integer multiplier, and all eleven equality multipliers. Form an inequality $-q^\top M^{\mathrm{sign}}q\le0$ from every selected vector $q$. Add these inequalities with coefficients $\lambda_k\ge0$, then add each identity in \eqref{eq:eqsys} with the unrestricted multiplier $\mu_j$. Denote the resulting coefficient vector and right-hand side by $C,R$. For any $z\in[0,1]^{101}$, $C^\top z\ge\sum_i\min(0,C_i)=B$. The independent verifier enumerates the generators, displacements and admissible anchored triple classes, reconstructs every coefficient of every quadratic form from the stored integer vectors, performs the Farkas combination with arbitrary-precision integer arithmetic and reports exactly the positive value in \eqref{eq:gap}. There is no reliance on a floating-point eigenvalue, optimizer feasibility flag, or unstated cut file in the validation step. The full deterministic Python verification program is part of the certificate and provides an executable finite derivation of $B-R>0$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+An independent set with at least $65$ vertices contains one with exactly $65$. For that subset, the averaged moment vector $z$ satisfies \eqref{eq:eqsys}, \eqref{eq:psd} and $0\le z\le1$, contradicting Lemma~\ref{lem:cert}. Therefore $\alpha(\Gamma)\le64$. The displayed linear construction has $64$ vertices, so $\alpha(\Gamma)=64$. Equation~\eqref{eq:factor} gives $D_{C_6}(6)=64\cdot64=4096$.
+\end{proof}
+
+\section{Reproducibility and independent-audit status}
+The minimal proof bundle contains the JSON certificate and \texttt{verify\_exact65.py}, a stand-alone Python~3.12 standard-library program. It independently rebuilds the sixty generators, their echelon basis, the ten pair orbits and all ninety-one anchored triple classes, verifies the eleven identities on an actual $64$-word code, checks that the selected quadratic cuts are nonnegative on that real control and recomputes \eqref{eq:gap} using exact integers. On a working directory containing the two files, run
+\begin{center}\texttt{python verify\_exact65.py}\end{center}
+A successful run ends with \texttt{CERT\_65 PASS\_INDEPENDENT\_EXACT}. Do not treat a truncated run or a Python exception as PASS. The original v1.1c bundle (containing independently audited bounds $64\le\alpha\le65$) is available separately; the new certificate supplies the missing exclusion of $65$. The numerical cutting-plane procedure was used only to \emph{find} the certificate, not to verify its mathematical validity.
+
+\paragraph{Independent AI audit, 22 October 2026.} A second AI system reported independently rebuilding the 60 forbidden vectors, their nine-dimensional span, the 64 components, ten displacement orbits, ninety-one admissible triple classes, eleven moment identities and ninety Rayleigh coefficient forms. Its independently recomputed exact positive gap agrees with \eqref{eq:gap}. It also found no false contradiction for $a=64$ and reran the supplemental direct-coset test (all ninety certificate vectors plus twenty-four extra signed controls). Thus the recorded status is \textbf{PROOF: conditional AI PASS; COMPUTATION: PASS}. The audit report was supplied by the author as a conversation transcript; it is not a human referee report, nor a formal proof-assistant verification or SAT proof log. The v1.2 and v1.2b original artifacts are preserved unmodified in the accompanying publication bundle.\par
+\paragraph{Version lineage.} Version 1.3 changes the audit/disclosure wording and bibliography, but not the mathematical theorem, its assumptions, the $65$-exclusion JSON certificate, the original verifier, any moment or cut coefficient, or the exact contradiction gap. An additional independent-reconstruction script and direct-coset checker are distributed only as supplemental checks; these do not by themselves exclude $65$.
+
+\section{Literature and limits}
+The graph-code framework, including the prohibition of \emph{exact} prescribed edge-set differences and the definition of $D_H(n)$, is due to earlier work of Alon~\cite{alon}; see also his recent survey~\cite{alon_survey}. In contrast, \emph{Structured Codes of Graphs}~\cite{structured} studies additional graph predicates, including Hamiltonicity, that must not be confused with excluding exactly one Hamiltonian six-cycle as a difference. Versteegen~\cite{versteegen} investigates upper bounds for \emph{linear} graph codes, principally in an asymptotic regime; the present finite upper bound covers arbitrary, not necessarily linear, families. General extremal graph-code structure is also studied by de Rancourt, Dodos, and Tyros~\cite{uniformity}. Classical code upper bounds by semidefinite methods appear in Schrijver~\cite{schrijver} and Laurent~\cite{laurent}. Neither the graph-code formulation nor semidefinite moment inequalities are presented as new.\par
+\paragraph{Bounded novelty statement.} In the literature examined through 22 October 2026, we did not locate a prior publication explicitly establishing $D_{C_6}(6)=4096$ for the \emph{exact-six-cycle-difference} prohibition. This is a limited search report, \emph{not} a proof that the result has never appeared, and no historical priority or first-discovery claim is made. In particular, source access and equivalence checks across all related literature cannot be exhaustive. Manuscript status: \textbf{unrefereed preprint; historical novelty inconclusive}.
+
+\begin{thebibliography}{9}
+\bibitem{alon} N. Alon, ``Graph-codes,'' \emph{European Journal of Combinatorics} \textbf{116} (2024), 103880. \href{https://doi.org/10.1016/j.ejc.2023.103880}{doi:10.1016/j.ejc.2023.103880}.
+\bibitem{structured} N. Alon, A. Gujgiczer, J. K\"orner, A. Milojevi\'c, and G. Simonyi, ``Structured Codes of Graphs,'' \emph{SIAM Journal on Discrete Mathematics} \textbf{37} (2023), 379--403. \href{https://doi.org/10.1137/22M1487989}{doi:10.1137/22M1487989}.
+\bibitem{alon_survey} N. Alon, ``Graph-Codes: Questions, Results and Methods,'' author-hosted manuscript of the 2025 Takagi lectures (consulted 2026). \url{https://web.math.princeton.edu/~nalon/PDFS/gcs4.pdf}.
+\bibitem{versteegen} L. Versteegen, ``Upper Bounds for Linear Graph Codes,'' \emph{Random Structures \& Algorithms} \textbf{66} (2025), e21263. \href{https://doi.org/10.1002/rsa.21263}{doi:10.1002/rsa.21263}. \url{https://arxiv.org/abs/2310.19891}.
+\bibitem{uniformity} N. de Rancourt, P. Dodos, and K. Tyros, ``Uniformity of extremal graph-codes,'' arXiv:2602.03298 (2026), preprint. \url{https://arxiv.org/abs/2602.03298}.
+\bibitem{schrijver} A. Schrijver, ``New code upper bounds from the Terwilliger algebra and semidefinite programming,'' \emph{IEEE Transactions on Information Theory} \textbf{51} (2005), 2859--2866.
+\bibitem{laurent} M. Laurent, ``Strengthened semidefinite programming bounds for codes,'' \emph{Mathematical Programming} \textbf{109} (2007), 239--261. \href{https://doi.org/10.1007/s10107-006-0030-3}{doi:10.1007/s10107-006-0030-3}.
+\end{thebibliography}
+\end{document}
