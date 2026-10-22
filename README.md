@@ -50,9 +50,19 @@ It reported PROOF=PASS (conditional) / COMPUTATION=PASS, with tests of real 64-w
 
 Status: Historical novelty **INCONCLUSIVE**, no priority claim; this is a narrowly specified finite graph-code result, not a new graph-code formalism or new generic PSD method.
 
-## Repository upload status
+## Public release
 
-The v1.3 source publication is being staged. Check whether `paper.pdf`, frozen evidence ZIP archives, and SHA256 manifest are actually present before treating this GitHub repository as a complete mirror. Until then use the verified v1.3 deliverable attached to the ChatGPT conversation. GitHub does not yet provide a DOI.
+- [GitHub Release v1.3.0](https://github.com/yonezaemon1-hub/no32-exact-six-cycle-graph-codes/releases/tag/v1.3.0): canonical PDF and unchanged frozen evidence ZIP.
+- [Zenodo record](https://zenodo.org/records/23581259), DOI [10.5281/zenodo.23581259](https://doi.org/10.5281/zenodo.23581259). Publication / Preprint, version 1.3, All rights reserved.
+- [Canonical five-page PDF](No32_C6_Exact_Optimality_v1_3_Paper.pdf), also mirrored byte for byte as `paper.pdf`.
+- [Frozen v1.3 evidence ZIP](No32_C6_Exact_Optimality_v1_3_Audit_Evidence.zip).
+
+The manuscript date remains 22 October 2026. Public uploading was completed on 23 October 2026. The five repository binaries and both Release assets were downloaded again and matched their source SHA-256 digests. The same PDF and ZIP were uploaded to Zenodo and checked after publication.
+
+PDF SHA-256: `ace4d7b3cc1f10236f7172675283c4d84b4b1311c8028503620b6cd039beaa0b`  
+Evidence ZIP SHA-256: `2e9bd745fdb0ff0a5a81464f6876e250eaa23fb6224fc4671526ac54c854be0a`
+
+`SHA256SUMS.txt` is the untouched manifest for the original archive members. For its original `README.md` entry, use `ARCHIVE_README_v1_3_UNMODIFIED.md`; the public root README is intentionally customized. The canonical named PDF and outer evidence ZIP are additional publication mirrors. Historical prepublication statements in frozen files do not replace the current links above.
 
 ## Publication / rights
 
